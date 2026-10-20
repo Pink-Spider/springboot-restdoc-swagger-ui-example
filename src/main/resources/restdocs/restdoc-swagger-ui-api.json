@@ -29,7 +29,7 @@
           "content" : {
             "application/json;charset=UTF-8" : {
               "schema" : {
-                "$ref" : "#/components/schemas/example-pathVariable-1752322908"
+                "$ref" : "#/components/schemas/example-pathVariable1288794500"
               },
               "examples" : {
                 "example-controller" : {
@@ -45,7 +45,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/example-pathVariable884838391"
+                  "$ref" : "#/components/schemas/example-pathVariable279790958"
                 },
                 "examples" : {
                   "example-controller" : {
@@ -61,7 +61,8 @@
   },
   "components" : {
     "schemas" : {
-      "example-pathVariable-1752322908" : {
+      "example-pathVariable1288794500" : {
+        "required" : [ "age", "hobbies", "name", "subClassList" ],
         "type" : "object",
         "properties" : {
           "hobbies" : {
@@ -87,6 +88,7 @@
             "type" : "array",
             "description" : "Subclasses",
             "items" : {
+              "required" : [ "subAge", "subName" ],
               "type" : "object",
               "properties" : {
                 "subAge" : {
@@ -106,7 +108,8 @@
           }
         }
       },
-      "example-pathVariable884838391" : {
+      "example-pathVariable279790958" : {
+        "required" : [ "code", "message", "value" ],
         "type" : "object",
         "properties" : {
           "code" : {
@@ -118,6 +121,7 @@
             "description" : "message"
           },
           "value" : {
+            "required" : [ "age", "hobbies", "name", "subClassList" ],
             "type" : "object",
             "properties" : {
               "hobbies" : {
@@ -143,6 +147,7 @@
                 "type" : "array",
                 "description" : "Subclasses",
                 "items" : {
+                  "required" : [ "subAge", "subName" ],
                   "type" : "object",
                   "properties" : {
                     "subAge" : {

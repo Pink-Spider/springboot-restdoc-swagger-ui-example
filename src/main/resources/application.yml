@@ -5,3 +5,7 @@ server:
 spring:
     application:
         name: restdoc-swagger-ui
+
+springdoc:
+    swagger-ui:
+        url: /restdocs/restdoc-swagger-ui-api.json

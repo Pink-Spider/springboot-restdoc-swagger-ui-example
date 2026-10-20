@@ -11,7 +11,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pinkspider.restdocswaggerui.example.dto.ExampleRequestDto;
 import io.pinkspider.restdocswaggerui.example.dto.ExampleResponseDto;
 import io.pinkspider.restdocswaggerui.example.service.ExampleService;
@@ -19,9 +18,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -29,6 +28,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import tools.jackson.databind.json.JsonMapper;
 
 @WebMvcTest(controllers = ExampleController.class)
 @AutoConfigureRestDocs
@@ -39,7 +39,7 @@ class ExampleControllerTest {
     protected MockMvc mockMvc;
 
     @Autowired
-    protected ObjectMapper objectMapper;
+    protected JsonMapper jsonMapper;
 
     @MockitoBean
     protected ExampleService exampleService;
@@ -83,7 +83,7 @@ class ExampleControllerTest {
                 RestDocumentationRequestBuilders.post("/example/{pathVariable}", "222")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(exampleRequestDto)))
+                    .content(jsonMapper.writeValueAsString(exampleRequestDto)))
             .andDo(
                 MockMvcRestDocumentationWrapper.document("example-controller",
                     preprocessRequest(prettyPrint()),

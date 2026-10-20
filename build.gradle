@@ -1,16 +1,15 @@
 buildscript {
     ext {
-        restdocsApiSpecVersion = '0.17.1'
+        restdocsApiSpecVersion = '0.20.2'
     }
 }
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.1'
+    id 'org.springframework.boot' version '4.1.1'
     id 'io.spring.dependency-management' version '1.1.7'
 
     id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
-    id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 group = 'io.pinkspider'
@@ -18,7 +17,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(23)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -32,19 +31,15 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    set('springCloudVersion', "2024.0.0")
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 
-    implementation 'org.modelmapper:modelmapper:3.2.0'
-    implementation 'com.fasterxml.jackson.module:jackson-module-mrbean:2.17.1'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.modelmapper:modelmapper:3.2.7'
+    implementation 'tools.jackson.module:jackson-module-mrbean'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -53,11 +48,11 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    testImplementation 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restdocs'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation "com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}"
-    testImplementation 'org.springframework:spring-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 openapi3 {
@@ -65,21 +60,16 @@ openapi3 {
     title = getRootProject().name + " API 문서"
     description = getRootProject().name + "API 문서 입니다. 작성된 테스트 코드 기반으로 생성됩니다. 삭제와 생성이 자동화 되었습니다."
     version = getVersion()
-    outputDirectory = "build/resources/main/restdocs"
+    // processResources 출력(build/resources/main)과 겹치면 copyJson 이 생성된 파일을 인식하지 못한다(NO-SOURCE).
+    outputDirectory = "build/api-spec"
     outputFileNamePrefix = getRootProject().name + "-api"
     format = 'json'
 }
 
-tasks.register('copyJson') {
-    doFirst {
-        project.file('src/main/resources/restdocs').mkdirs()
-    }
-    doLast {
-        copy {
-            from "build/resources/main/restdocs/" + getRootProject().name + "-api.json"
-            into "src/main/resources/restdocs"
-        }
-    }
+tasks.register('copyJson', Copy) {
+    from layout.buildDirectory.dir("api-spec")
+    include getRootProject().name + "-api.json"
+    into "src/main/resources/restdocs"
     dependsOn('openapi3')
 }
 
@@ -88,9 +78,7 @@ build {
 }
 
 clean {
-    project.delete(
-            files("src/main/resources/restdocs/" + getRootProject().name + "-api.json")
-    )
+    delete "src/main/resources/restdocs/" + getRootProject().name + "-api.json"
 }
 
 tasks.named('test') {

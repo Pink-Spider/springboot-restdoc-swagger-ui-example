@@ -1,21 +1,20 @@
 package io.pinkspider.restdocswaggerui.global.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import tools.jackson.databind.json.JsonMapper;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResult<T> {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     @Getter
     @Builder.Default
@@ -40,7 +39,7 @@ public class ApiResult<T> {
         return singleResult;
     }
 
-    public Object getValue() throws JsonProcessingException {
-        return objectMapper.readValue(objectMapper.writeValueAsString(this.value), Object.class);
+    public Object getValue() {
+        return jsonMapper.readValue(jsonMapper.writeValueAsString(this.value), Object.class);
     }
 }
