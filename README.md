@@ -1,5 +1,12 @@
 # Spring Boot REST Docs + Swagger UI Example
 
+[![Java](https://img.shields.io/badge/Java-25-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/25/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Gradle](https://img.shields.io/badge/Gradle-9.8.2-02303A?logo=gradle&logoColor=white)](https://gradle.org)
+[![Spring REST Docs](https://img.shields.io/badge/Spring%20REST%20Docs-4.0-6DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-restdocs)
+[![Swagger UI](https://img.shields.io/badge/Swagger%20UI-springdoc%203.1.1-85EA2D?logo=swagger&logoColor=black)](https://springdoc.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+
 Spring REST Docs 테스트 코드로 OpenAPI 3 스펙을 생성하고, 그 스펙을 Swagger UI로 보여주는 예제입니다.
 
 컨트롤러에 Swagger 어노테이션을 붙이지 않습니다. 문서는 테스트에서 만들어지기 때문에, 테스트가 통과하면 문서와 실제 API 응답이 일치한다는 것이 보장됩니다.
